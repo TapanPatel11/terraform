@@ -13,7 +13,7 @@ terraform {
   backend "s3" {
     bucket         = "atlantis-tf-state-dev"
     dynamodb_table = "atlantis-terraform-state-dev"
-    key            = "terraform/atlantis.tfstate"
+    key            = "terraform/atlantis-network.tfstate"
     region         = "us-east-1"
     encrypt        = true
   }

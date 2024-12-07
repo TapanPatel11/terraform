@@ -36,7 +36,7 @@ resource "aws_subnet" "third" {
   cidr_block        = "10.0.3.0/24"
   availability_zone = "us-east-1c"
   tags = {
-    name = "${var.app_name}-sb-third"
+      name = "${var.app_name}-sb-third"
   }
 }
 
@@ -134,4 +134,38 @@ resource "aws_vpc_security_group_egress_rule" "allow_all" {
   from_port   = -1
   ip_protocol = "-1"
   to_port     = -1
+}
+
+resource "aws_lb" "application_load_balancer" {
+  name               = "${var.app_name}-alb" 
+  load_balancer_type = "application"
+  enable_cross_zone_load_balancing = true
+  enable_zonal_shift = false 
+
+  subnets = [ # Referencing the default subnets
+   aws_subnet.first.id,
+    aws_subnet.second.id,
+     aws_subnet.third.id
+  ]
+
+  # security group
+  security_groups = [aws_security_group.atlantis.id]
+}
+
+resource "aws_lb_target_group" "atlantis" {
+  name     = "${var.app_name}-alb-tg"
+  port     = 80
+  protocol = "HTTP"
+  vpc_id   = aws_vpc.atlantis.id
+  target_type = "ip"
+}
+
+resource "aws_lb_listener" "listener" {
+  load_balancer_arn = aws_lb.application_load_balancer.arn
+  port              = "80"
+  protocol          = "HTTP"
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.atlantis.arn
+  }
 }
