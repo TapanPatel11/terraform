@@ -1,0 +1,28 @@
+# Local Terraform state files
+*.tfstate
+*.tfstate.*
+
+# Crash logs
+crash.log
+
+# Terraform variable files (often used to store sensitive information)
+*.tfvars
+*.tfvars.json
+
+# Override files (not intended to be committed)
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Generated plan files
+*.tfplan
+
+# Terraform provider plugins
+.terraform/
+
+# Sensitive data backups
+*.backup
+
+# Metadata files
+*.log
