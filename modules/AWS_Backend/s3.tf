@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "s3backend" {
-  bucket = var.s3_bucket_name
+  bucket = local.s3_bucket_name
 
   object_lock_enabled = true
 
