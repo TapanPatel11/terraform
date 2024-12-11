@@ -1,0 +1,11 @@
+global:
+  storageClass: gp2-resizable  # This is the global default storage class you want to use (for non-specific storage).
+
+clickhouse:
+  installCustomStorageClass: true
+
+persistence:
+  enabled: true
+  storageClass: "gp2-resizable"  # Use the `gp2-resizable` storage class.
+  size: 30Gi
+  accessMode: ReadWriteOnce
