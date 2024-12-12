@@ -54,37 +54,37 @@ variable "instance_types" {
 
 variable "pvt_desired_size" {
   description = "Desired number of worker nodes in private subnet"
-  default = 1
+  default = 3
   type = number
 }
 
 variable "pvt_max_size" {
   description = "Maximum number of worker nodes in private subnet."
-  default = 1
+  default = 5
   type = number
 }
 
 variable "pvt_min_size" {
   description = "Minimum number of worker nodes in private subnet."
-  default = 1
+  default = 2
   type = number
 }
 
 variable "pblc_desired_size" {
   description = "Desired number of worker nodes in public subnet"
-  default = 1
+  default = 3
   type = number
 }
 
 variable "pblc_max_size" {
   description = "Maximum number of worker nodes in public subnet."
-  default = 1
+  default = 5
   type = number
 }
 
 variable "pblc_min_size" {
   description = "Minimum number of worker nodes in public subnet."
-  default = 1
+  default = 2
   type = number
 }
 
