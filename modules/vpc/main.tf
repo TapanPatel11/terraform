@@ -1,11 +1,9 @@
 data "aws_availability_zones" "available" {}
 
-
 ############################################################################################################
 ### VPC 
 ############################################################################################################
 resource "aws_vpc" "main" {
-
   cidr_block           = var.cidr_block
   enable_dns_support   = var.enable_dns_support
   enable_dns_hostnames = var.enable_dns_hostnames
@@ -37,6 +35,10 @@ resource "aws_subnet" "public" {
     var.default_tags, var.public_subnet_tags, {
       Name = "${var.vpc_name}-public-subnet-${count.index + 1}"
   })
+
+  depends_on = [
+    aws_vpc.main
+  ]
 }
 
 ## Private Subnets
@@ -51,8 +53,11 @@ resource "aws_subnet" "private" {
     var.default_tags, var.private_subnet_tags, {
       Name = "${var.vpc_name}-private-subnet-${count.index + 1}"
   })
-}
 
+  depends_on = [
+    aws_vpc.main
+  ]
+}
 
 ############################################################################################################
 ### INTERNET GATEWAY
@@ -64,8 +69,11 @@ resource "aws_internet_gateway" "main" {
     var.default_tags, {
       Name = "${var.vpc_name}-internetgateway"
   })
-}
 
+  depends_on = [
+    aws_vpc.main
+  ]
+}
 
 ############################################################################################################
 ### NAT GATEWAY 
@@ -74,6 +82,10 @@ resource "aws_eip" "nat_gateway" {
   count = var.nat_gateway ? 1 : 0
 
   domain = "vpc"
+
+  depends_on = [
+    aws_internet_gateway.main
+  ]
 }
 
 resource "aws_nat_gateway" "main" {
@@ -88,10 +100,10 @@ resource "aws_nat_gateway" "main" {
   })
 
   depends_on = [
-    aws_internet_gateway.main
+    aws_internet_gateway.main,
+    aws_subnet.public
   ]
 }
-
 
 ############################################################################################################
 ### ROUTE TABLES 
@@ -104,6 +116,10 @@ resource "aws_route_table" "public" {
     var.default_tags, {
       Name = "${var.vpc_name}-routetable-public"
   })
+
+  depends_on = [
+    aws_vpc.main
+  ]
 }
 
 ## Public Route Table rules
@@ -111,6 +127,10 @@ resource "aws_route" "public" {
   route_table_id         = aws_route_table.public.id
   gateway_id             = aws_internet_gateway.main.id
   destination_cidr_block = "0.0.0.0/0"
+
+  depends_on = [
+    aws_internet_gateway.main
+  ]
 }
 
 ## Public Route table associations
@@ -119,6 +139,11 @@ resource "aws_route_table_association" "public" {
 
   subnet_id      = aws_subnet.public[count.index].id
   route_table_id = aws_route_table.public.id
+
+  depends_on = [
+    aws_route_table.public,
+    aws_subnet.public
+  ]
 }
 
 # Private Route table
@@ -129,6 +154,10 @@ resource "aws_route_table" "private" {
     var.default_tags, {
       Name = "${var.vpc_name}-routetable-private"
   })
+
+  depends_on = [
+    aws_vpc.main
+  ]
 }
 
 ## Private Route Table rules
@@ -136,6 +165,10 @@ resource "aws_route" "private" {
   route_table_id         = aws_route_table.private.id
   nat_gateway_id         = var.nat_gateway ? aws_nat_gateway.main[0].id : null
   destination_cidr_block = "0.0.0.0/0"
+
+  depends_on = [
+    aws_nat_gateway.main
+  ]
 }
 
 ## Private Route table associations
@@ -144,5 +177,9 @@ resource "aws_route_table_association" "private" {
 
   subnet_id      = aws_subnet.private[count.index].id
   route_table_id = aws_route_table.private.id
-}
 
+  depends_on = [
+    aws_route_table.private,
+    aws_subnet.private
+  ]
+}
