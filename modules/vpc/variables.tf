@@ -73,8 +73,10 @@ variable "public_subnet_additional_bits" {
 
 variable "public_subnet_tags" {
   type        = map(string)
-  default     = {}
-  description = "Tags to add to all public subnets. Default: {} (empty map)"
+  default     = {
+    "Tier":"Public"
+  }
+  description = "Tags to add to all public subnets.  Default: { Tier:Public}"
 }
 
 variable "private_subnet_count" {
@@ -91,6 +93,8 @@ variable "private_subnet_additional_bits" {
 
 variable "private_subnet_tags" {
   type        = map(string)
-  default     = {}
-  description = "Tags to add to all private subnets. Default: {} (empty map)"
+  default     = {
+        "Tier":"Public"
+  }
+  description = "Tags to add to all private subnets. Default: { Tier:Private} "
 }

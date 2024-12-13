@@ -43,8 +43,8 @@
     |------------------|-----------------------------------------------------|--------------|---------------------------------------------|
     | `global_tags`    | Global tags applied to all resources.              | map(string)  | `{ManagedBy = "Terraform", Environment = "dev"}` |
     | `default_tags`   | Tags to add to all resources.                      | map(string)  | `{}`                                        |
-    | `public_subnet_tags` | Tags to add to public subnets.                 | map(string)  | `{}`                                        |
-    | `private_subnet_tags`| Tags to add to private subnets.                | map(string)  | `{}`                                        |
+    | `public_subnet_tags` | Tags to add to public subnets.                 | map(string)  | `{Tier:Public}`                                        |
+    | `private_subnet_tags`| Tags to add to private subnets.                | map(string)  | `{Tier:Private}`                                        |
 
 ??? "NAT Gateway"
     | Name           | Description                           | Type  | Default |
