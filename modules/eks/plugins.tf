@@ -3,9 +3,9 @@
 ############################################################################################################
 data "aws_eks_addon_version" "main" {
   for_each = toset(var.cluster_addons)
-
   addon_name         = each.key
   kubernetes_version = aws_eks_cluster.main.version
+  most_recent = true
 }
 
 resource "aws_eks_addon" "main" {

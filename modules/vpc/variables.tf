@@ -94,7 +94,7 @@ variable "private_subnet_additional_bits" {
 variable "private_subnet_tags" {
   type        = map(string)
   default     = {
-        "Tier":"Public"
+        "Tier":"Private"
   }
   description = "Tags to add to all private subnets. Default: { Tier:Private} "
 }
