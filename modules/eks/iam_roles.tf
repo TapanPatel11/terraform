@@ -9,7 +9,7 @@ resource "aws_iam_role" "eks_cluster_role" {
 
 data "aws_iam_policy_document" "eks_assume_role_policy" {
   statement {
-    actions = ["sts:AssumeRole"]
+    actions = ["sts:AssumeRole", "sts:TagSession"]
 
     principals {
       type        = "Service"
@@ -52,7 +52,7 @@ data "aws_iam_policy_document" "assume_role_policy" {
     ]
     principals {
       type        = "Service"
-      identifiers = ["ec2.amazonaws.com"]
+      identifiers = ["ec2.amazonaws.com","pods.eks.amazonaws.com"]
     }
   }
 }
