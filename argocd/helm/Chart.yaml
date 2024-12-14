@@ -1,5 +1,0 @@
-apiVersion: v2
-name: argocd
-description: A Helm chart to install ArgoCD
-version: 0.1.0
-appVersion: "2.5.4"  # Match with the desired ArgoCD version
